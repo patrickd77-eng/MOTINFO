@@ -44,11 +44,10 @@ namespace MOTINFO.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                ViewData["SearchMade"] = true;
-                ViewData["Error"] = false;
-
                 Car[] car = JsonConvert.DeserializeObject<Car[]>(response.Content.ReadAsStringAsync().Result);
 
+                ViewData["Error"] = false;
+                ViewData["SearchMade"] = true;
                 ViewData["make"] = car.FirstOrDefault().Make;
                 ViewData["model"] = car.FirstOrDefault().Model;
                 ViewData["registered"] = car.FirstOrDefault().FirstUsedDate;
@@ -56,48 +55,72 @@ namespace MOTINFO.Controllers
                 ViewData["color"] = car.FirstOrDefault().PrimaryColour;
                 ViewData["license"] = car.FirstOrDefault().Registration;
 
-                var motTests = new List<String>();
 
+
+                var motTests = new List<String>();
                 StringBuilder failures = new StringBuilder();
 
-
-                foreach (var item in car[0].MotTests)
+                if (car[0].MotTests == null)
                 {
-                    if (item.TestResult.ToString().Contains("Failed"))
-                    {
+                    ViewData["SearchMade"] = false;
 
-                        for (var i = 0; i < item.RfrAndComments.Length; i++)
-                        {
-                            failures.Append(item.RfrAndComments[i].Text + " ");
-                        }
-                        motTests.Add("Test date: " +
-                         item.CompletedDate.ToString()
-                         + ", which " +
-                         item.TestResult.ToString().ToLower()
-                         + ". The mileage was: " +
-                         item.OdometerValue + ". Reason(s) for failure: " + failures);
-                    }
-                    else
-                    {
-                        motTests.Add("Test date: " +
-                         item.CompletedDate.ToString()
-                         + ", which " +
-                         item.TestResult.ToString().ToLower()
-                         + ". The mileage was: " +
-                         item.OdometerValue + " " + item.OdometerUnit + ".");
-
-                    }
+                    ViewData["Error"] = true;
+                    ViewData["ErrorMessage"] = registration + " is not eligible for MOT tests yet. Only UK vehicles that are 3 or more years old are eligible.";
+                    ViewData["registered"] = "Unknown";
+                    return View();
                 }
-                ViewData["MotResults"] = motTests;
+
+                else
+                {
+
+
+                    foreach (var item in car[0].MotTests)
+                    {
+                        if (item.TestResult.ToString().Contains("Failed"))
+                        {
+
+                            for (var i = 0; i < item.RfrAndComments.Length; i++)
+                            {
+                                failures.Append(item.RfrAndComments[i].Text + " ");
+                            }
+                            motTests.Add("Test date: " +
+                             item.CompletedDate.ToString()
+                             + ", which " +
+                             item.TestResult.ToString().ToLower()
+                             + ". The mileage was: " +
+                             item.OdometerValue + ". Reason(s) for failure: " + failures);
+                        }
+                        else
+                        {
+                            motTests.Add("Test date: " +
+                             item.CompletedDate.ToString()
+                             + ", which " +
+                             item.TestResult.ToString().ToLower()
+                             + ". The mileage was: " +
+                             item.OdometerValue + " " + item.OdometerUnit + ".");
+
+                        }
+                    }
+
+
+                    ViewData["MotResults"] = motTests;
+
+
+                    return View();
+                }
+
             }
             else
             {
                 ViewData["SearchMade"] = false;
+
                 ViewData["Error"] = true;
-                ViewData["ErrorMessage"] = registration + " is not a valid registration or does not exist. Please try again.";
+                ViewData["ErrorMessage"] = "The registration, " + registration + ", is not valid." + " Error Message: " + response.StatusCode.ToString();
                 return View();
+
+
             }
-            return View();
+
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
