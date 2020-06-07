@@ -65,7 +65,7 @@
 
         <h2 class="mb-3">Results for @ViewData["license"]</h2>
         <div class="row">
-            <div class="col-sm-3">
+            <div class="col-sm- ">
                 <h3 class="">Original Color:</h3>
                 @ViewData["color"]
             </div>
@@ -87,21 +87,21 @@
         <h3 class="mb-2 mt-2">MOT Tests</h3>
         <small>(Most recent first)</small>
 
-        <div class="row">
-            <hr />
-            @if ((List<string>)ViewData["MotResults"] != null)
+
+        <hr />
+        @if ((List<string>)ViewData["MotResults"] != null)
+        {
+
+            @foreach (var item in (List<string>)ViewData["MotResults"])
             {
+                <div>
 
-                @foreach (var item in (List<string>)ViewData["MotResults"])
-                {
-                    <div class="col-sm-4">
+                    <div class="card mt-3 mx-1 @(item.Contains("failed") ? "bg-warning" : "bg-success") ">@item</div>
 
-                        <div class="card mt-3 mx-1 font-weight-bold @(item.Contains("failed") ? "bg-warning" : "bg-success") ">@item</div>
-
-                    </div>
-                }
+                </div>
             }
-        </div>
+        }
+
 
 
 

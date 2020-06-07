@@ -89,7 +89,10 @@ namespace MOTINFO.Controllers
                              item.TestResult.ToString().ToLower()
                              + ". The mileage was: " +
                              item.OdometerValue + ". Reason(s) for failure: " + failures);
+
+                            failures.Clear();
                         }
+
                         else
                         {
                             motTests.Add("Test date: " +
