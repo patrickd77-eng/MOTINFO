@@ -35,19 +35,19 @@
 
             <h2 class="mb-3">Results for @ViewData["license"]</h2>
             <div class="row">
-                <div class="col-3">
+                <div class="col-sm-3">
                     <h3 class="">Original Color:</h3>
                     @ViewData["color"]
                 </div>
-                <div class="col-3">
+                <div class="col-sm-3">
                     <h3>Fuel Type:</h3>
                     @ViewData["fuel"]
                 </div>
-                <div class="col-3">
+                <div class="col-sm-3">
                     <h3>Make and model:</h3>
                     @ViewData["make"] @ViewData["model"]
                 </div>
-                <div class="col-3">
+                <div class="col-sm-3">
                     <h3>First Registered:</h3>
                     @ViewData["registered"]
                 </div>
@@ -65,19 +65,19 @@
 
         <h2 class="mb-3">Results for @ViewData["license"]</h2>
         <div class="row">
-            <div class="col-3">
+            <div class="col-sm-3">
                 <h3 class="">Original Color:</h3>
                 @ViewData["color"]
             </div>
-            <div class="col-3">
+            <div class="col-sm-3">
                 <h3>Fuel Type:</h3>
                 @ViewData["fuel"]
             </div>
-            <div class="col-3">
+            <div class="col-sm-3">
                 <h3>Make and model:</h3>
                 @ViewData["make"] @ViewData["model"]
             </div>
-            <div class="col-3">
+            <div class="col-sm-3">
                 <h3>First Registered:</h3>
                 @ViewData["registered"]
             </div>
@@ -94,7 +94,7 @@
 
                 @foreach (var item in (List<string>)ViewData["MotResults"])
                 {
-                    <div class="col-4">
+                    <div class="col-sm-4">
 
                         <div class="card mt-3 mx-1 font-weight-bold @(item.Contains("failed") ? "bg-warning" : "bg-success") ">@item</div>
 
